@@ -1,4 +1,6 @@
+const dedent = require('dedent');
 const pool = require('../pool');
+const toCamelCase = require('../utils/toCamelCase');
 
 class UserController {
   static test(req, res) {
@@ -9,10 +11,10 @@ class UserController {
   static async find(req, res) {
     const { rows } = await pool.query(`
       SELECT *
-      FROM users
+      FROM users;
     `);
 
-    res.send(rows);
+    res.send(toCamelCase(rows));
   }
 
   static async findById(req, res) {
