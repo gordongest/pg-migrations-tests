@@ -6,7 +6,7 @@ router.get('/', UserController.test)
 
 router.get('/users', UserController.find)
 
-router.get('/users/:id', )
+router.get('/users/:id', UserController.findById)
 
 router.post('/users', )
 
