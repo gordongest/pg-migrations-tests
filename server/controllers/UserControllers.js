@@ -8,7 +8,7 @@ class UserController {
     res.send("i'm awake");
   }
 
-  static async find(req, res) {
+  static async find() {
     const { rows } = await pool.query(`
       SELECT *
       FROM users
@@ -16,12 +16,10 @@ class UserController {
       `
     );
 
-    res.send(toCamelCase(rows));
+    return toCamelCase(rows);
   }
 
-  static async findById(req, res) {
-    const { id } = req.params;
-
+  static async findById(id) {
     const { rows } = await pool.query(
       `
       SELECT *
@@ -32,14 +30,10 @@ class UserController {
       [id]
     );
 
-    rows[0] ?
-      res.send(toCamelCase(rows)[0]) :
-      res.sendStatus(404);
+    return toCamelCase(rows)[0];
   }
 
-  static async insertUser(req, res) {
-    const { username, bio } = req.body;
-
+  static async insertUser(username, bio) {
     const { rows } = await pool.query(`
       INSERT INTO users (username, bio)
       VALUES ($1, $2)
@@ -47,15 +41,10 @@ class UserController {
       `, [username, bio]
     );
 
-    rows[0] ?
-      res.status(201).send(toCamelCase(rows)[0]) :
-      res.sendStatus(501);
+    return toCamelCase(rows)[0];
   }
 
-  static async updateUser(req, res) {
-    const { id } = req.params;
-    const { username, bio } = req.body;
-
+  static async updateUser(id, username, bio) {
     const { rows } = await pool.query(`
       UPDATE users
       SET username = $1, bio = $2
@@ -64,14 +53,10 @@ class UserController {
       `, [username, bio, id]
     );
 
-    rows[0] ?
-      res.send(toCamelCase(rows)[0]) :
-      res.sendStatus(404);
+    return toCamelCase(rows)[0];
   }
 
-  static async deleteUser(req, res) {
-    const { id } = req.params;
-
+  static async deleteUser(id) {
     const { rows } = await pool.query(`
       DELETE FROM users
       WHERE id = $1
@@ -79,20 +64,16 @@ class UserController {
       `, [id]
     );
 
-    rows[0] ?
-      res.send(toCamelCase(rows)[0]) :
-      res.sendStatus(404);
+    return toCamelCase(rows)[0];
   }
 
-  static async count(req, res) {
+  static async count() {
     const { rows } = await pool.query(`
       SELECT COUNT (*)
       FROM users;
     `);
 
-    rows[0] ?
-      res.send(rows[0].count) :
-      res.sendStatus(500);
+    return rows[0].count;
   }
 }
 

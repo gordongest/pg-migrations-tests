@@ -2,19 +2,51 @@ const express = require('express');
 const router = express.Router();
 const UserControllers = require('./controllers/UserControllers');
 
-router.get('/', UserControllers.test)
+router.get('/', UserControllers.test);
 
-router.get('/count', UserControllers.count)
+router.get('/count', async (req, res) => {
+  const result = await UserControllers.count();
 
-router.get('/users', UserControllers.find)
+  res.send(result);
+});
 
-router.get('/users/:id', UserControllers.findById)
+router.get('/users', async (req, res) => {
+  const users = await UserControllers.find();
 
-router.post('/users', UserControllers.insertUser)
+  res.send(users);
+});
 
-router.put('/users/:id', UserControllers.updateUser)
+router.get('/users/:id', async (req, res) => {
+  const { id } = req.params;
 
-router.delete('/users/:id', UserControllers.deleteUser)
+  const user = await UserControllers.findById(id);
 
+  res.send(user);
+});
+
+router.post('/users', async (req, res) => {
+  const { username, bio } = req.body;
+
+  const result = await UserControllers.insertUser(username, bio);
+
+  res.send(result);
+});
+
+router.put('/users/:id', async (req, res) => {
+  const { id } = req.params;
+  const { username, bio } = req.body;
+
+  const result = await UserControllers.updateUser(id, username, bio);
+
+  res.send(result);
+});
+
+router.delete('/users/:id', async (req, res) => {
+  const { id } = req.params;
+
+  const result = await UserControllers.deleteUser(id);
+
+  res.send(result);
+});
 
 module.exports = router;
