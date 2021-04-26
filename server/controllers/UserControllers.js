@@ -11,7 +11,8 @@ class UserController {
   static async find(req, res) {
     const { rows } = await pool.query(`
       SELECT *
-      FROM users;
+      FROM users
+      ORDER BY id;
       `
     );
 
@@ -20,7 +21,7 @@ class UserController {
 
   static async findById(req, res) {
     const { id } = req.params;
-    
+
     const { rows } = await pool.query(
       `
       SELECT *
