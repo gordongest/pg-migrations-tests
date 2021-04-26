@@ -12,14 +12,15 @@ class UserController {
     const { rows } = await pool.query(`
       SELECT *
       FROM users;
-    `);
+      `
+    );
 
     res.send(toCamelCase(rows));
   }
 
   static async findById(req, res) {
     const { id } = req.params;
-
+    
     const { rows } = await pool.query(
       `
       SELECT *
@@ -30,7 +31,9 @@ class UserController {
       [id]
     );
 
-    rows[0] ? res.send(toCamelCase(rows)[0]) : res.sendStatus(404);
+    rows[0] ?
+      res.send(toCamelCase(rows)[0]) :
+      res.sendStatus(404);
   }
 
   static async insertUser(req, res) {
