@@ -20,15 +20,17 @@ class UserController {
   static async findById(req, res) {
     const { id } = req.params;
 
-    const { rows } = await pool.query(`
+    const { rows } = await pool.query(
+      `
       SELECT *
       FROM users
       WHERE id = $1
       LIMIT 1;
-      `, [id]
+      `,
+      [id]
     );
 
-    res.send(toCamelCase(rows)[0]);
+    rows[0] ? res.send(toCamelCase(rows)[0]) : res.sendStatus(404);
   }
 
   static async insertUser(req, res) {
@@ -41,7 +43,9 @@ class UserController {
       `, [username, bio]
     );
 
-    res.status(201).send(toCamelCase(rows)[0]);
+    rows[0] ?
+      res.status(201).send(toCamelCase(rows)[0]) :
+      res.sendStatus(501);
   }
 
   static async updateUser(req, res) {
@@ -52,14 +56,29 @@ class UserController {
       UPDATE users
       SET username = $1, bio = $2
       WHERE id = $3
-      RETURNING *
-    `, [username, bio, id]
+      RETURNING *;
+      `, [username, bio, id]
     );
 
-    res.send(toCamelCase(rows)[0]);
+    rows[0] ?
+      res.send(toCamelCase(rows)[0]) :
+      res.sendStatus(404);
   }
 
-  static async deleteUser(req, res) {}
+  static async deleteUser(req, res) {
+    const { id } = req.params;
+
+    const { rows } = await pool.query(`
+      DELETE FROM users
+      WHERE id = $1
+      RETURNING *;
+      `, [id]
+    );
+
+    rows[0] ?
+      res.send(toCamelCase(rows)[0]) :
+      res.sendStatus(404);
+  }
 }
 
 module.exports = UserController;
