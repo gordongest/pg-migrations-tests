@@ -31,11 +31,35 @@ class UserController {
     res.send(toCamelCase(rows)[0]);
   }
 
-  static async insert(req, res) {}
+  static async insertUser(req, res) {
+    const { username, bio } = req.body;
 
-  static async update(req, res) {}
+    const { rows } = await pool.query(`
+      INSERT INTO users (username, bio)
+      VALUES ($1, $2)
+      RETURNING *;
+      `, [username, bio]
+    );
 
-  static async delete(req, res) {}
+    res.status(201).send(toCamelCase(rows)[0]);
+  }
+
+  static async updateUser(req, res) {
+    const { id } = req.params;
+    const { username, bio } = req.body;
+
+    const { rows } = await pool.query(`
+      UPDATE users
+      SET username = $1, bio = $2
+      WHERE id = $3
+      RETURNING *
+    `, [username, bio, id]
+    );
+
+    res.send(toCamelCase(rows)[0]);
+  }
+
+  static async deleteUser(req, res) {}
 }
 
 module.exports = UserController;

@@ -8,10 +8,10 @@ router.get('/users', UserController.find)
 
 router.get('/users/:id', UserController.findById)
 
-router.post('/users', )
+router.post('/users', UserController.insertUser)
 
-router.put('/users/:id', )
+router.put('/users/:id', UserController.updateUser)
 
-router.delete('/users/:id', )
+router.delete('/users/:id', UserController.deleteUser)
 
 module.exports = router;
