@@ -1,4 +1,4 @@
-const app = require('./app.js');
+const app = require('./app');
 const pool = require('./pool');
 
 const PORT = process.env.PORT;
@@ -8,7 +8,7 @@ pool
   .connect(dbConfig)
   .then(res => {
     console.log(res.rows[0].greeting);
-    app().listen(PORT, () => {
+    app.listen(PORT, () => {
       console.log(`Server is listening on port ${PORT}...`)
     });
   })

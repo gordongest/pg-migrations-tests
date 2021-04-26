@@ -83,6 +83,17 @@ class UserController {
       res.send(toCamelCase(rows)[0]) :
       res.sendStatus(404);
   }
+
+  static async count(req, res) {
+    const { rows } = await pool.query(`
+      SELECT COUNT (*)
+      FROM users;
+    `);
+
+    rows[0] ?
+      res.send(rows[0].count) :
+      res.sendStatus(500);
+  }
 }
 
 module.exports = UserController;

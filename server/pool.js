@@ -6,7 +6,7 @@ class Pool {
   connect(options) {
     this._pool = new pg.Pool(options);
     return this._pool.query(`
-      SELECT 'Connected to PostgreSQL' AS greeting;
+      SELECT 'Connected to PostgreSQL...' AS greeting;
     `);
   }
 
