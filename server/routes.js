@@ -29,7 +29,7 @@ router.post('/users', async (req, res) => {
 
   const result = await UserControllers.insertUser(username, bio);
 
-  res.send(result);
+  res.status(201).send(result);
 });
 
 router.put('/users/:id', async (req, res) => {
