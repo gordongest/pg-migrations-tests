@@ -2,13 +2,16 @@ const request = require('supertest');
 const app = require('../../server/app');
 const pool = require('../../server/pool');
 const UsersRepo = require('../../server/repos/UsersRepo');
+const Context = require('../context')
 
-const dbConfig = { connectionString: process.env.TEST_DATABASE_URL };
+let context;
 
-beforeEach(() => {
-  return pool
-    .connect(dbConfig)
-    .then(() => console.log('Connected to PostgreSQL...'));
+beforeAll(async () => {
+  context = await Context.build();
+});
+
+afterAll(() => {
+  return context.close();
 });
 
 it('creates a user', async () => {
@@ -22,8 +25,4 @@ it('creates a user', async () => {
   const endCount = await UsersRepo.count();
 
   expect(endCount - startCount).toEqual(1);
-});
-
-afterAll(() => {
-  return pool.close();
 });
