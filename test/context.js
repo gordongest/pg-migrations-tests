@@ -7,7 +7,7 @@ const dbConfig = { connectionString: process.env.TEST_DATABASE_URL };
 
 class Context {
   constructor(roleName) {
-    this.roleName = roleName;
+    this._roleName = roleName;
   }
 
   static async build() {
@@ -60,6 +60,22 @@ class Context {
       .then(() => console.log('Running tests on PostgreSQL...'));
 
     return new Context(roleName);
+  }
+
+  async close() {
+    await pool.close();
+
+    await pool.connect(dbConfig);
+
+    await pool.query(format(
+      'DROP SCHEMA %I CASCADE;', this._roleName
+    ));
+
+    await pool.query(format(
+      'DROP ROLE %I;', this._roleName
+    ));
+
+    await pool.close();
   }
 }
 

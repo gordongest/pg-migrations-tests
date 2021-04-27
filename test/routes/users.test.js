@@ -4,8 +4,10 @@ const pool = require('../../server/pool');
 const UsersRepo = require('../../server/repos/UsersRepo');
 const Context = require('../context')
 
+let context;
+
 beforeAll(async () => {
-  const context = await Context.build();
+  context = await Context.build();
 });
 
 it('creates a user', async () => {
@@ -22,5 +24,5 @@ it('creates a user', async () => {
 });
 
 afterAll(() => {
-  return pool.close();
+  return context.close();
 });
