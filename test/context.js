@@ -10,6 +10,12 @@ class Context {
     this._roleName = roleName;
   }
 
+  async reset() {
+    return pool.query(`
+      DELETE FROM users;
+    `);
+  }
+
   static async build() {
     // randomly generate new role name
     const roleName = 'a' + randomBytes(4).toString('hex');
