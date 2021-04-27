@@ -2,10 +2,13 @@ const request = require('supertest');
 const app = require('../../server/app');
 const pool = require('../../server/pool');
 const UsersRepo = require('../../server/repos/UsersRepo');
-const Context = require('../context')
 
-beforeAll(async () => {
-  const context = await Context.build();
+const dbConfig = { connectionString: process.env.TEST_DATABASE_URL };
+
+beforeEach(() => {
+  return pool
+    .connect(dbConfig)
+    .then(() => console.log('Connected to PostgreSQL...'));
 });
 
 it('creates a user', async () => {

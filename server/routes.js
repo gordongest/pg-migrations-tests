@@ -1,17 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const UserControllers = require('./controllers/UserControllers');
+const UsersRepo = require('./repos/UsersRepo');
 
-router.get('/', UserControllers.test);
+router.get('/', (req, res) => {
+  res.send(UsersRepo.test())
+});
 
 router.get('/count', async (req, res) => {
-  const result = await UserControllers.count();
+  const result = await UsersRepo.count();
 
   res.send(result);
 });
 
 router.get('/users', async (req, res) => {
-  const users = await UserControllers.find();
+  const users = await UsersRepo.find();
 
   res.send(users);
 });
@@ -19,7 +21,7 @@ router.get('/users', async (req, res) => {
 router.get('/users/:id', async (req, res) => {
   const { id } = req.params;
 
-  const user = await UserControllers.findById(id);
+  const user = await UsersRepo.findById(id);
 
   res.send(user);
 });
@@ -27,7 +29,7 @@ router.get('/users/:id', async (req, res) => {
 router.post('/users', async (req, res) => {
   const { username, bio } = req.body;
 
-  const result = await UserControllers.insertUser(username, bio);
+  const result = await UsersRepo.insertUser(username, bio);
 
   res.status(201).send(result);
 });
@@ -36,7 +38,7 @@ router.put('/users/:id', async (req, res) => {
   const { id } = req.params;
   const { username, bio } = req.body;
 
-  const result = await UserControllers.updateUser(id, username, bio);
+  const result = await UsersRepo.updateUser(id, username, bio);
 
   res.send(result);
 });
@@ -44,7 +46,7 @@ router.put('/users/:id', async (req, res) => {
 router.delete('/users/:id', async (req, res) => {
   const { id } = req.params;
 
-  const result = await UserControllers.deleteUser(id);
+  const result = await UsersRepo.deleteUser(id);
 
   res.send(result);
 });

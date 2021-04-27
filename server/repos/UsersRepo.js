@@ -2,10 +2,10 @@ const dedent = require('dedent');
 const pool = require('../pool');
 const toCamelCase = require('../utils/toCamelCase');
 
-class UserController {
-  static test(req, res) {
+class UsersRepo {
+  static test() {
     console.log('DING');
-    res.send("i'm awake");
+    return "i'm awake";
   }
 
   static async find() {
@@ -77,4 +77,4 @@ class UserController {
   }
 }
 
-module.exports = UserController;
+module.exports = UsersRepo;
