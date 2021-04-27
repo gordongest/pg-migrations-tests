@@ -10,9 +10,9 @@ beforeAll(async () => {
   context = await Context.build();
 });
 
-beforeEach(async () => {
-  await context.reset();
-});
+// beforeEach(async () => {
+//   await context.reset();
+// });
 
 afterAll(() => {
   return context.close();
@@ -30,3 +30,19 @@ it('creates a user', async () => {
 
   expect(endCount - startCount).toEqual(1);
 });
+
+it('updates a user', async () => {
+  // await request(app)
+  //   .post('/users')
+  //   .send({ username: 'testUser', bio: 'testBio' })
+  //   .expect(201);
+
+  await request(app)
+    .put('/users/1')
+    .send({ username: 'testUser', bio: 'updatedBio' })
+    .expect(200);
+
+  const users = await UsersRepo.find();
+
+  expect(users[0].bio).toEqual('updatedBio');
+})
